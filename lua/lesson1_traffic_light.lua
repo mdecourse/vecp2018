@@ -1,4 +1,97 @@
+--[[ 參考: http://www.coppeliarobotics.com/helpFiles/en/childScripts.htm#nonThreaded
+Non-threaded child scripts
+
+Non-threaded child scripts are pass-through scripts. This means that every time they are called, they should perform some task and then return control. 
+
+If control is not returned, then the whole simulation halts. 
+
+Non-threaded child scripts operate as functions, and are called by the main script twice per simulation step:
+
+from the main script's actuation phase, and from the main script's sensing phase. 
+
+This type of child script should always be chosen over threaded child scripts whenever possible.
+
+Non-threaded child scripts are executed in a cascaded way: 
+
+child scripts are executed starting with root objects (or parentless objects), and ending with leaf objects (or childless objects). 
+
+The command simHandleChildScripts, called from the default main script, handles the execution of non-threaded child scripts.
+
+Imagine an example of a simulation model representing an automatic door: 
+
+a proximity sensor in the front and the back allows detecting an approaching person.
+
+When the person is close enough, the door opens automatically. 
+
+Following code shows a typical non-threaded child script illustrating above example:
+
+if (sim_call_type==sim_childscriptcall_initialization) then
+    sensorHandleFront=simGetObjectHandle("DoorSensorFront")
+    sensorHandleBack=simGetObjectHandle("DoorSensorBack")
+    motorHandle=simGetObjectHandle("DoorMotor")
+end
+
+if (sim_call_type==sim_childscriptcall_actuation) then
+    resF=simReadProximitySensor(sensorHandleFront) 
+    resB=simReadProximitySensor(sensorHandleBack)
+    if ((resF>0)or(resB>0)) then
+        simSetJointTargetVelocity(motorHandle,-0.2)
+    else
+        simSetJointTargetVelocity(motorHandle,0.2)
+    end
+end
+
+if (sim_call_type==sim_childscriptcall_sensing) then
+
+end
+
+if (sim_call_type==sim_childscriptcall_cleanup) then
+    -- Put some restoration code here
+end
+
+A non-threaded child script should be segmented in 4 parts:
+
+the initialization part: 
+
+this part will be executed just one time (the first time the child script is called). 
+
+This can be at the beginning of a simulation, but also in the middle of a simulation: 
+
+remember that objects associated with child scripts can be copy/pasted into a scene at any time, also when a simulation is running. 
+
+Usually you would put some initialization code as well as handle retrieval in this part.
+
+the actuation part: 
+
+this part will be executed in each simulation step, during the actuation phase of a simulation step. 
+
+Refer to the main script default code for more details about the actuation phase, but typically, you would do some actuation in this part (no sensing).
+    
+the sensing part:
+
+this part will be executed in each simulation step, during the sensing phase of a simulation step. 
+
+Refer to the main script default code for more details about the sensing phase, but typically, you would do only do sensing in this part (no actuation).
+    
+the restoration part: this part will be executed one time just before a simulation ends, or before the script is destroyed.
+]]
+
 -- 非執行緒子程式段
+
+-- 自訂 round() 函式
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
+-- 自訂 sleep() 函式
+
+local clock = os.clock
+function sleep(n)  -- seconds
+  local t0 = clock()
+  while clock() - t0 <= n do end
+end
 
 -- 起始程式段
 
@@ -42,6 +135,10 @@ if (sim_call_type==sim_childscriptcall_actuation) then
     local currentTime = simGetSimulationTime()
     local dt = currentTime - lastTime
 
+    sleep(1)
+    -- http://www.coppeliarobotics.com/helpFiles/en/regularApi/simAddStatusbarMessage.htm
+    simAddStatusbarMessage("currentTime:" .. round(currentTime, 4))
+    simAddStatusbarMessage("lastTime:" .. round(lastTime, 4))
     timer = timer + dt
     
     -- 假如定時變數大於 100, 變數歸零

@@ -128,13 +128,13 @@ function evolve()
 		tmpPop = selection(population, fitnesses)		
 		-- reproduce
 		population = reproduce(tmpPop)
-		printf(">gen %d, best cost=%d [%s]\n", i, fitness(bestString), bestString)
+		print("第"..i .. "代適應值:".. fitness(bestString) .. "最佳字串:".. bestString)
 	end	
 	return bestString
 end
 
 -- run
-printf("Genetic Algorithm on OneMax, with %s\n",_VERSION);
-math.randomseed(seed)
+print(_VERSION)
+--math.randomseed(seed)
 best = evolve()
-printf("Finished!\nBest solution found had the fitness of %d [%s].\n", fitness(best), best)
+print("適應值:".. fitness(best) .."最佳:".. best)

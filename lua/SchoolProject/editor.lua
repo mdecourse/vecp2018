@@ -21,8 +21,9 @@ local newenv = setmetatable({}, {
 
 function js.global.runLua(window, code, outputElm) 
     --Reset user global table to a clean state
-    M = {}
-    M["_G"] = M
+    -- Yen comment the next two lines
+    --M = {}
+    --M["_G"] = M
     --Redirect print and error to output box
     M.print = function(text)
         local msgElm = document:createTextNode(text)

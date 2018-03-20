@@ -7,6 +7,7 @@ local traceback = debug.traceback
 local insert = table.insert
 local document = js.global.document
 local xpcall = xpcall
+storage = js.global.localStorage
 
 local M = {} --All of the user globals
 
@@ -45,6 +46,7 @@ function js.global.runLua(window, code, outputElm)
     end 
     
     --Finnally load and run the code
+    storage:setItem("lua_src_id", tostring(code))
     local fn, err = load(tostring(code), "sandbox", "bt", newenv)
     
     if fn then

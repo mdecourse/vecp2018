@@ -7,6 +7,17 @@
 <link rel="stylesheet" href="style.css">
 <title>How to program in Lua</title>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<!-- 導入 FileSaver 與 filereader -->
+<script type="text/javascript" src="ace/FileSaver.min.js"></script>
+
+<script type="text/javascript" src="ace/filereader.js"></script>
+<script type="text/javascript">
+function doSave(storage_id, filename){
+    var blob = new Blob([localStorage[storage_id]], {type: "text/plain;charset=utf-8"});
+    filename = document.getElementById(filename).value
+    saveAs(blob, filename+".lua");
+}
+</script>
     </head>
     <body>
 <header>
@@ -20,13 +31,18 @@
             <div class="row">
                 <button type="button" class="btn btn-primary btn-execute">Execute</button>
             </div>
-            <br>
+    <form>
+    <label>Filename: <input type="text" id="lua_filename" placeholder="input file name"/>.lua</label>
+    <input type="submit" value="Save" onclick="doSave('lua_src_id', 'lua_filename');"/>
+</form>
+            <br />
         </div>
 <script src="ace/ace.js"></script>
 <script src="ace/mode-lua.js"></script>
 <script src="fengari-web.js"></script>
 <script src="editor.lua" type="application/lua" async></script>
 <script src="editor.js"></script>
-    <canvas id="canvas" width="600" height="600"></canvas>
+<br /><br />
+<canvas id="canvas" width="600" height="600"></canvas>
     </body>
 </html>

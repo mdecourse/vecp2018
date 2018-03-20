@@ -14,7 +14,9 @@
 <script type="text/javascript">
 function doSave(storage_id, filename){
     var blob = new Blob([localStorage[storage_id]], {type: "text/plain;charset=utf-8"});
-    filename = document.getElementById(filename).value
+    filename = document.getElementById(filename).value;
+    source_code = window.localStorage.getItem("lua_src_id");
+    document.getElementById("editor").value = source_code;
     saveAs(blob, filename+".lua");
 }
 </script>
@@ -25,7 +27,7 @@ function doSave(storage_id, filename){
         
         <div class="repl-container">
             <div class="row editor-container">
-                <div class="col-sm editor">print("Lua is fun!")</div>
+                <div id="editor" class="col-sm editor">print("Lua is fun!")</div>
                 <div class="col-sm output"></div>
             </div>
             <div class="row">

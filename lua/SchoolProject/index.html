@@ -43,7 +43,7 @@ function doSave(storage_id, filename){
 <script src="ace/mode-lua.js"></script>
 <script src="fengari-web.js"></script>
 <script src="editor.lua" type="application/lua" async></script>
-<script type="application/lua">
+<script type="application/lua" async>
 local js = require "js"
 source_code = js.global.localStorage:getItem("lua_src_id")
 if source_code ~= "" then

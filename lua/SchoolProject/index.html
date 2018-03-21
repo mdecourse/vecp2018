@@ -20,16 +20,7 @@ function doSave(storage_id, filename){
     saveAs(blob, filename+".lua");
 }
 </script>
-<script type="application/lua">
-local js = require "js"
-source_code = js.global.localStorage:getItem("lua_src_id")
-if source_code ~= "" then
- js.global.document.getElementById("editor").textContent = source_code
-else
- js.global.document.getElementById("editor").textContent = 'print("Lua is fun!")'
-end
-</script>
-    </head>
+</head>
     <body>
         <h1 class="center">Hello Lua!</h1>
         
@@ -52,6 +43,15 @@ end
 <script src="ace/mode-lua.js"></script>
 <script src="fengari-web.js"></script>
 <script src="editor.lua" type="application/lua" async></script>
+<script type="application/lua">
+local js = require "js"
+source_code = js.global.localStorage:getItem("lua_src_id")
+if source_code ~= "" then
+ js.global.document.getElementById("editor").textContent = source_code
+else
+ js.global.document.getElementById("editor").textContent = 'print("Lua is fun!")'
+end
+</script>
 <script src="editor.js"></script>
 <br /><br />
 <canvas id="canvas" width="600" height="600"></canvas>

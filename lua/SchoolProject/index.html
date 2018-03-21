@@ -24,9 +24,9 @@ function doSave(storage_id, filename){
 local js = require "js"
 source_code = js.global.localStorage:getItem("lua_src_id")
 if source_code ~= "" then
- js.global.document.getElementById("editor).textContent = source_code
+ js.global.document.getElementById("editor").textContent = source_code
 else
- js.global.document.getElementById("editor).textContent = = 'print("Lua is fun!")'
+ js.global.document.getElementById("editor").textContent = 'print("Lua is fun!")'
 end
 </script>
     </head>

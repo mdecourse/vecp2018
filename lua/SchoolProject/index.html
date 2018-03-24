@@ -19,6 +19,27 @@ function doSave(storage_id, filename){
     //document.getElementById("editor_field").value = source_code;
     saveAs(blob, filename+".lua");
 }
+
+// 用來 parse window.location.href 中的變數
+function parse_query_string(query) {
+  var vars = query.split("&");
+  var query_string = {};
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split("=");
+    // If first entry with this name
+    if (typeof query_string[pair[0]] === "undefined") {
+      query_string[pair[0]] = decodeURIComponent(pair[1]);
+      // If second entry with this name
+    } else if (typeof query_string[pair[0]] === "string") {
+      var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+      query_string[pair[0]] = arr;
+      // If third or later entry with this name
+    } else {
+      query_string[pair[0]].push(decodeURIComponent(pair[1]));
+    }
+  }
+  return query_string;
+}
 </script>
 </head>
     <body>
@@ -44,16 +65,33 @@ function doSave(storage_id, filename){
 <!-- 導入外部的 ext1.lua 程式內容 -->
 <script type="application/lua">
 package.path = "ext1.lua"
-require("ex1")
+require("ext1")
 js = require "js"
 storage = js.global.localStorage
 source_code = storage:getItem("lua_src_id")
+-- js.global.location.search 為 "?filename=fun1", 然後用 sub(2, -1) 取第 2 到最後一個字元, 表示去除 "?"
+-- 之後再由 js.global:parse_query_string() javascript 函式的呼叫解讀出 filename 變數的值
+-- 最後再根據 filename 的字串值, 作為呼叫 global namespace 中的函數名稱, 也就是 _G[example]()
+-- 就可以在 localStorage 為空時, 透過瀏覽器的 reload 載入 ext1.lua 中的各個範例程式
+parse_qs = js.global:parse_query_string(js.global.location.search:sub(2, -1))
+
+if parse_qs.filename == nil then
+    example = "fun1"
+else
+    js.global:prompt("即將載入範例")
+    example = parse_qs.filename
+end
+
+
+
 if source_code ~= ""  then
     js.global.document:getElementById("editor_field").textContent = source_code
 else
-    js.global.document:getElementById("editor_field").textContent = fun1()
+    js.global.document:getElementById("editor_field").textContent = _G[example]()
 end
+
 -- js.global:prompt("testing")
+-- js.global:prompt(parse_qs.filename)
 function js.global.clearCanvas()
     local canvas = js.global.document:getElementById("canvas")
     local ctx = canvas:getContext("2d")

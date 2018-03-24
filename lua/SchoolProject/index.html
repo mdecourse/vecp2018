@@ -78,7 +78,7 @@ parse_qs = js.global:parse_query_string(js.global.location.search:sub(2, -1))
 if parse_qs.filename == nil then
     example = "fun1"
 else
-    js.global:prompt("即將載入範例")
+    --js.global:prompt("即將載入範例")
     example = parse_qs.filename
 end
 

@@ -40,6 +40,10 @@ function parse_query_string(query) {
   }
   return query_string;
 }
+save = false;
+document:getElementById("save").onclick = function(){
+    save = true;
+}
 </script>
 </head>
     <body>
@@ -57,7 +61,7 @@ function parse_query_string(query) {
             </div>
     <form>
     <label>Filename: <input type="text" id="lua_filename" placeholder="input file name"/>.lua</label>
-    <input type="submit" value="Save" onclick="doSave('lua_src_id', 'lua_filename');"/>
+    <input type="submit" id="save" value="Save" onclick="doSave('lua_src_id', 'lua_filename');"/>
     </form>
       </div>
 <script src="editor.lua" type="application/lua" async></script>
@@ -84,7 +88,7 @@ end
 
 
 
-if source_code ~= ""  then
+if source_code ~= ""  and js.global.save == true then
     js.global.document:getElementById("editor_field").textContent = source_code
 else
     js.global.document:getElementById("editor_field").textContent = _G[example]()

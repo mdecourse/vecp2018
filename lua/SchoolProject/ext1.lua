@@ -143,3 +143,30 @@ print("----------")
 print("平均猜對次數: "..averagenum)
     ]]
 end
+
+function scope1()
+    return [[
+-- var here is global variable
+var = 1
+for i = 1, 3 do
+-- var here is local variable in for loop
+    local var = 2
+    -- here print the local var value
+    print(var)
+end
+-- here print the global var value
+print(var)
+    ]]
+end
+
+function function1()
+    return [[
+function myfun(n)
+    for i = 1, n do
+        print(i)
+    end
+end
+
+myfun(5)
+    ]]
+end

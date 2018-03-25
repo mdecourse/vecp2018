@@ -40,10 +40,6 @@ function parse_query_string(query) {
   }
   return query_string;
 }
-save = false;
-document:getElementById("save").onclick = function(){
-    save = true;
-}
 </script>
 </head>
     <body>
@@ -58,8 +54,15 @@ document:getElementById("save").onclick = function(){
                 <button type="button" class="btn btn-primary btn-execute">Execute</button>
                 &nbsp;&nbsp;
                 <button onclick="window.clearCanvas()">清除畫面</button>
+                &nbsp;<a href="?filename=hello">hello</a>&nbsp;|
+                &nbsp;<a href="?filename=fun1">draw</a>&nbsp;|
+                &nbsp;<a href="?filename=guess1">guess1</a>&nbsp;|
+                &nbsp;<a href="?filename=guess2">guess2</a>&nbsp;|
+                &nbsp;<a href="?filename=scope1">scope1</a>&nbsp;|
+                &nbsp;<a href="?filename=function1">function1</a>&nbsp;
             </div>
     <form>
+    (請注意: 程式執行後才可以存檔!) <br />
     <label>Filename: <input type="text" id="lua_filename" placeholder="input file name"/>.lua</label>
     <input type="submit" id="save" value="Save" onclick="doSave('lua_src_id', 'lua_filename');"/>
     </form>
@@ -86,13 +89,12 @@ else
     example = parse_qs.filename
 end
 
-
-
-if source_code ~= ""  and js.global.save == true then
-    js.global.document:getElementById("editor_field").textContent = source_code
-else
+-- 改為從 URL 中取 filename 名稱載入編輯器, 若無 filename 則載入 default 的 fun1()
+--if source_code ~= "" then
+    --js.global.document:getElementById("editor_field").textContent = source_code
+--else
     js.global.document:getElementById("editor_field").textContent = _G[example]()
-end
+--end
 
 -- js.global:prompt("testing")
 -- js.global:prompt(parse_qs.filename)

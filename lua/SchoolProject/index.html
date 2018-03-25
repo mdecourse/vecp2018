@@ -84,11 +84,11 @@ end
 
 
 
-if source_code ~= ""  then
-    js.global.document:getElementById("editor_field").textContent = source_code
-else
+--if source_code ~= ""  then
+    --js.global.document:getElementById("editor_field").textContent = source_code
+--else
     js.global.document:getElementById("editor_field").textContent = _G[example]()
-end
+--end
 
 -- js.global:prompt("testing")
 -- js.global:prompt(parse_qs.filename)

@@ -24,12 +24,20 @@ function js.global.runLua(window, code, outputElm)
     --Reset user global table to a clean state
     -- Yen comment the next two lines
     --M = {}
-    --M["_G"] = M
+    --
+    M["_G"] = M
     --Redirect print and error to output box
-    M.print = function(text)
-        local msgElm = document:createTextNode(text)
+    M.print = function(...)
+        -- Yen fix the print bugs
+        local toprint = pack(...)
+        local msgElm = document:createTextNode(toprint)
         msgElm.className = "console-msg"
-        outputElm:appendChild(msgElm)
+        for i = 1, toprint.n do
+            if i ~= 1 then
+                outputElm:appendChild(document:createTextNode("\t"))
+            end
+            outputElm:appendChild(document:createTextNode(tostring(toprint[i])))
+        end
         outputElm:appendChild(document:createElement("br"))
     end
     

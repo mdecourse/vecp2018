@@ -58,7 +58,7 @@ end
 function hello()
     return [[
 for i = 1, 5 do
-    print("hello world")
+    print(i, ": hello world")
 end
     ]]
 end

@@ -36,10 +36,6 @@ function star(radius, xc, yc, n)
     end
 end
 
-return {
-	fun1 = fun1
-}
-
 -- 以下利用多邊形畫線函式呼叫執行畫框線或填入顏色
 -- 畫五邊形框線
 star(100, 200, 200, 5)

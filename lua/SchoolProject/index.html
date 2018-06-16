@@ -11,9 +11,12 @@
 <script type="text/javascript" src="ace/FileSaver.min.js"></script>
 <script type="text/javascript" src="ace/filereader.js"></script>
 <script src="fengari-web.js"></script>
+<!-- 導入 sql.js -->
+<script src="sql/sql.js"></script>
 <!-- 導入 Cango library -->
 <script type="text/javascript" src="Cango-13v08-min.js"></script>
 <script type="text/javascript" src="CangoAxes-4v01-min.js"></script>
+<script type="text/javascript" src="gearUtils-05.js"></script>
 <script type="text/javascript">
 function doSave(storage_id, filename){
     var blob = new Blob([localStorage[storage_id]], {type: "text/plain;charset=utf-8"});
@@ -66,6 +69,7 @@ function parse_query_string(query) {
                 &nbsp;<a href="?filename=star1">star</a>&nbsp;|
                 &nbsp;<a href="?filename=flag">flag</a>&nbsp;|
                 &nbsp;<a href="?filename=cango1">cango1</a>&nbsp;|
+                &nbsp;<a href="?filename=gear1">gear1</a>&nbsp;|
                 &nbsp;<a href="?filename=oop1">oop1</a>&nbsp;|
                 &nbsp;<a href="?filename=ga_onemax">ga</a>&nbsp;
             </div>
@@ -79,8 +83,8 @@ function parse_query_string(query) {
 <!-- 以下的 lua 從 localStorage 取出原始碼, 放入 editor_field -->
 <!-- 導入外部的 ext1.lua 程式內容 -->
 <script type="application/lua">
-package.path = "ext1.lua"
-require("ext1")
+--package.path = "ext1.lua"
+--require("ext1")
 js = require "js"
 storage = js.global.localStorage
 source_code = storage:getItem("lua_src_id")
@@ -96,6 +100,9 @@ else
     --js.global:prompt("即將載入範例")
     example = parse_qs.filename
 end
+
+package.path = "ext/"..example..".lua"
+require(example)
 
 -- 改為從 URL 中取 filename 名稱載入編輯器, 若無 filename 則載入 default 的 fun1()
 --if source_code ~= "" then
